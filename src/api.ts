@@ -8,6 +8,7 @@ const instance = axios.create({
 interface ManifestResponse {
   circle: {
     users: {
+      id: number
       address: string
       name: string
     }[]
@@ -15,7 +16,9 @@ interface ManifestResponse {
       id: number
       epoch_id: number
       recipient_address: string
+      recipient_id: number
       sender_address: string
+      sender_id: number
       tokens: number
     }[]
   }
@@ -38,15 +41,25 @@ export const fetchCircleSnapshot = async (
   const epochGifts = token_gifts.filter((g) => g.epoch_id === TARGET_EPOCH)
 
   const gifts: Gift[] = epochGifts.map(
-    ({id, recipient_address, sender_address, tokens}) => ({
+    ({
+      id,
+      recipient_address,
+      recipient_id,
+      sender_address,
+      sender_id,
+      tokens,
+    }) => ({
       id,
       recipientAddress: recipient_address,
+      recipientId: recipient_id,
       senderAddress: sender_address,
+      senderId: sender_id,
       tokens,
     }),
   )
 
-  const users: User[] = responseUsers.map(({address, name}) => ({
+  const users: User[] = responseUsers.map(({id, address, name}) => ({
+    id,
     address,
     name,
     gifts: {

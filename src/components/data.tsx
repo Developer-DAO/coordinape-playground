@@ -1,3 +1,4 @@
+import {Stack} from '@chakra-ui/react'
 import axios from 'axios'
 import {useEffect} from 'react'
 import {useQuery} from 'react-query'
@@ -30,7 +31,11 @@ export const Data = () => {
     <div>
       {isLoading && <p>Loading...</p>}
       {error && <p>Error: {(error as any).message}</p>}
-      {data && <Tables {...data} />}
+      {data && (
+        <Stack>
+          <Tables {...data} />
+        </Stack>
+      )}
     </div>
   )
 }
