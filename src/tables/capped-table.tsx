@@ -10,7 +10,7 @@ import {
   Thead,
   Tr,
 } from '@chakra-ui/react'
-import {CircleSnapshot, User} from '../types'
+import {EpochData, User} from '../types'
 import {
   codeReceivedFromGive,
   decimalToPercent,
@@ -20,7 +20,7 @@ import {
 } from '../utils'
 import {TableDescription} from './components'
 
-export type CappedTableProps = Pick<CircleSnapshot, 'users'>
+export type CappedTableProps = Pick<EpochData, 'users'>
 
 interface CappedUser extends User {
   giveRemovedByCap: number

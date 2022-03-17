@@ -9,7 +9,7 @@ import {
   Thead,
   Tr,
 } from '@chakra-ui/react'
-import {CircleSnapshot} from '../types'
+import {EpochData} from '../types'
 import {
   codeReceivedFromGive,
   decimalToPercent,
@@ -19,7 +19,7 @@ import {
 } from '../utils'
 import {TableDescription} from './components'
 
-export type UnadjustedTableProps = Pick<CircleSnapshot, 'users' | 'totalGive'>
+export type UnadjustedTableProps = Pick<EpochData, 'users' | 'totalGive'>
 
 export const UnadjustedTable = ({users, totalGive}: UnadjustedTableProps) => {
   const sortedUsers = [...users]

@@ -1,9 +1,9 @@
 import {Stack, Table, Tbody, Td, Th, Thead, Tr} from '@chakra-ui/react'
-import {CircleSnapshot, Gift, User} from '../types'
+import {EpochData, Gift, User} from '../types'
 import {numberFormatter} from '../utils'
 import {TableDescription} from './components'
 
-export type TransactionsTableProps = Pick<CircleSnapshot, 'gifts' | 'users'>
+export type TransactionsTableProps = Pick<EpochData, 'gifts' | 'users'>
 
 interface Transaction {
   recipient: User

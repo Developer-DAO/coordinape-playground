@@ -1,12 +1,12 @@
 import {Tab, TabList, TabPanel, TabPanels, Tabs} from '@chakra-ui/react'
-import {CircleSnapshot} from '../types'
+import {EpochData} from '../types'
 import {CappedTable} from './capped-table'
 import {DropGt10Table} from './drop-gt-10-table'
 import {PairsTable} from './pairs-table'
 import {TransactionsTable} from './transactions-table'
 import {UnadjustedTable} from './unadjusted-table'
 
-export interface DataProps extends CircleSnapshot {}
+export interface DataProps extends EpochData {}
 
 export const Tables = ({gifts, users, totalGive}: DataProps) => {
   return (

@@ -1,5 +1,5 @@
 import axios from 'axios'
-import {CircleSnapshot, Gift, User} from './types'
+import {EpochData, Gift, User} from './types'
 
 const instance = axios.create({
   headers: {'Content-Type': 'application/json'},
@@ -11,46 +11,33 @@ interface ManifestResponse {
       address: string
       name: string
     }[]
+    token_gifts: {
+      id: number
+      epoch_id: number
+      recipient_address: string
+      sender_address: string
+      tokens: number
+    }[]
   }
 }
 
-type UsersResponse = {
-  address: string
-  name: string
-}[]
+const TARGET_EPOCH = 2538
 
-type GiftsResponse = {
-  id: number
-  recipient_address: string
-  sender_address: string
-  tokens: number
-}[]
-
-const fetchGifts = async (token: string): Promise<GiftsResponse> => {
-  const response = await instance.get<GiftsResponse>(
-    'https://api.coordinape.com/api/v2/pending-token-gifts?circle_id=1573&epoch_id=2538',
-    {headers: {Authorization: token}},
-  )
-  return response.data
-}
-
-const fetchManifestUsers = async (token: string): Promise<UsersResponse> => {
+export const fetchCircleSnapshot = async (
+  token: string,
+): Promise<EpochData> => {
   const response = await instance.get<ManifestResponse>(
     'https://api.coordinape.com/api/v2/manifest?circle_id=1573',
     {headers: {Authorization: token}},
   )
-  return response.data.circle.users.map(({address, name}) => ({address, name}))
-}
 
-export const fetchCircleSnapshot = async (
-  token: string,
-): Promise<CircleSnapshot> => {
-  const [usersResponse, giftsResponse] = await Promise.all([
-    fetchManifestUsers(token),
-    fetchGifts(token),
-  ])
+  const {
+    circle: {token_gifts, users: responseUsers},
+  } = response.data
 
-  const gifts: Gift[] = giftsResponse.map(
+  const epochGifts = token_gifts.filter((g) => g.epoch_id === TARGET_EPOCH)
+
+  const gifts: Gift[] = epochGifts.map(
     ({id, recipient_address, sender_address, tokens}) => ({
       id,
       recipientAddress: recipient_address,
@@ -59,7 +46,7 @@ export const fetchCircleSnapshot = async (
     }),
   )
 
-  const users: User[] = usersResponse.map(({address, name}) => ({
+  const users: User[] = responseUsers.map(({address, name}) => ({
     address,
     name,
     gifts: {
@@ -68,10 +55,7 @@ export const fetchCircleSnapshot = async (
     },
   }))
 
-  const totalGive = giftsResponse.reduce(
-    (total, gift) => total + gift.tokens,
-    0,
-  )
+  const totalGive = epochGifts.reduce((total, gift) => total + gift.tokens, 0)
 
   return {
     gifts,

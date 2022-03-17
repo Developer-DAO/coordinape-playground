@@ -14,7 +14,7 @@ export interface User {
   }
 }
 
-export interface CircleSnapshot {
+export interface EpochData {
   gifts: Gift[]
   users: User[]
   totalGive: number
