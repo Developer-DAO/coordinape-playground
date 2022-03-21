@@ -48,7 +48,8 @@ async function writeCsv(
 }
 
 function mapUser(user: User, totalGive: number) {
-  const {id, name, address} = user
+  const {id, address} = user
+  const name = user.name.includes(',') ? `"${user.name}"` : user.name
   const giveReceived = user.gifts.received.reduce(
     (sum, gift) => sum + gift.tokens,
     0,
