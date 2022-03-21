@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "test": "jest"
+    "test": "jest",
+    "csv": "node -r @swc/register scripts/csv.ts"
   },
   "dependencies": {
     "@chakra-ui/react": "^1.8.6",
@@ -23,6 +24,8 @@
     "react-query": "^3.34.16"
   },
   "devDependencies": {
+    "@swc/core": "^1.2.159",
+    "@swc/register": "^0.1.10",
     "@types/jest": "^27.4.1",
     "@types/node": "17.0.21",
     "@types/react": "17.0.39",
