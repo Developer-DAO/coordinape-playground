@@ -27,13 +27,12 @@ a `csv` format.
 ### Generating a CSV results file
 
 This project includes a `csv` script which fetches the Coordinape epoch results
-and writes them to a file in a `csv` format. Note that you need to provide your
-Coordinape auth token (the one in the example won't work).
+and writes them to two files in a `csv` format:
+
+- `users.csv`: all of the users in the epoch and their GIFT+CODE allocations
+- `gifts.csv`: all of the token transactions in the epoch
 
 ```sh
 # writes results to data.csv
 COORDINAPE_TOKEN="Bearer 12345|ABCDEFGHIJKLMNOP" yarn csv
-
-# writes results to output.csv
-COORDINAPE_TOKEN="Bearer 12345|ABCDEFGHIJKLMNOP" yarn csv output.csv
 ```

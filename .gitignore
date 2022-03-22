@@ -1,5 +1,9 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
+*.csv
+!data/gifts.csv
+!data/users.csv
+
 # dependencies
 /node_modules
 /.pnp
@@ -18,7 +22,6 @@
 # misc
 .DS_Store
 *.pem
-*.csv
 
 # debug
 npm-debug.log*

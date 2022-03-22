@@ -18,10 +18,11 @@ run()
 const TOTAL_CODE = 5_000_000
 const CONTRIBUTOR_CODE_ALLOCATION = 1_000_000
 
-async function writeCsv(
-  {users, totalGive}: EpochData,
-  path: string,
-): Promise<WriteOutput> {
+async function writeCsv(csv: string, file: string) {
+  await writeFile(file, csv)
+}
+
+async function writeUsers({users, totalGive}: EpochData) {
   const mappedUsers: UserData[] = users.map((user) => mapUser(user, totalGive))
   mappedUsers.sort((user1, user2) => user2.giveReceived - user1.giveReceived)
 
@@ -37,14 +38,29 @@ async function writeCsv(
     }) =>
       `${id},${name},${address},${giveReceived},${givePercentage},${codeReceived},${codePercentage}`,
   )
-  await writeFile(
-    path,
+
+  await writeCsv(
     `id,name,address,giveReceived,givePercentage,codeReceived,codePercentage\n${csv.join(
       '\n',
     )}`,
+    'data/users.csv',
+  )
+  console.log(`wrote ${csv.length + 1} lines to data/users.csv`)
+}
+
+async function writeGifts({gifts}: EpochData) {
+  gifts.sort((gift1, gift2) => gift2.tokens - gift1.tokens)
+
+  const csv = gifts.map(
+    ({id, recipientId, senderId, tokens}) =>
+      `${id},${recipientId},${senderId},${tokens}`,
   )
 
-  return {lines: csv.length + 1}
+  await writeCsv(
+    `id,recipientId,senderId,tokens\n${csv.join('\n')}`,
+    'data/gifts.csv',
+  )
+  console.log(`wrote ${csv.length + 1} lines to data/gifts.csv`)
 }
 
 function mapUser(user: User, totalGive: number) {
@@ -75,12 +91,9 @@ async function run() {
     throw Error('missing COORDINAPE_TOKEN')
   }
 
-  const outputPath = process.argv[2] || 'data.csv'
-
   try {
     const data = await fetchCircleSnapshot(token)
-    const {lines} = await writeCsv(data, outputPath)
-    console.log(`wrote ${lines} lines to ${outputPath}`)
+    await Promise.all([writeUsers(data), writeGifts(data)])
     process.exit(0)
   } catch (error) {
     console.error('failed to fetch data', error)
